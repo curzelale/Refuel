@@ -1,0 +1,6 @@
+@RefuelAPI_HostAddress = http://localhost:5094
+
+GET {{RefuelAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
