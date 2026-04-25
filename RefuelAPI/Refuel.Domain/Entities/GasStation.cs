@@ -31,6 +31,19 @@ public class GasStation
         Id = Guid.NewGuid();
     }
 
+    public void Update(string name, string address, double latitude, double longitude)
+    {
+        EnforceNameBusinessRules(name);
+        EnforceAddressBusinessRules(address);
+        EnforceLatitudeBusinessRules(latitude);
+        EnforceLongitudeBusinessRules(longitude);
+
+        Name = name;
+        Address = address;
+        Latitude = latitude;
+        Longitude = longitude;
+    }
+
     private void EnforceNameBusinessRules(string name)
     {
         if (string.IsNullOrWhiteSpace(name))

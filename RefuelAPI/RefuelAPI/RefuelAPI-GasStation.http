@@ -1,0 +1,35 @@
+@RefuelAPI_HostAddress = http://localhost:5094
+
+###Create
+
+POST {{RefuelAPI_HostAddress}}/api/v1/GasStations/
+Content-Type: application/json
+
+{
+  "Name": "Fina",
+  "Address": "Caldonazzo",
+  "Latitude": 47,
+  "Longitude": 11
+}
+
+###Update
+
+PUT {{RefuelAPI_HostAddress}}/api/v1/GasStations/acc888b3-9493-4335-be86-232a39655aa5
+Content-Type: application/json
+
+{
+  "Name": "Firmin",
+  "Address": "Caldonazzo",
+  "Latitude": 470,
+  "Longitude": 11
+}
+
+
+### GetAll
+GET {{RefuelAPI_HostAddress}}/api/v1/GasStations/
+Accept: application/json
+
+### Get One
+
+GET {{RefuelAPI_HostAddress}}/api/v1/GasStations/acc888b3-9493-4335-be86-232a39655aa5
+Accept: application/json
