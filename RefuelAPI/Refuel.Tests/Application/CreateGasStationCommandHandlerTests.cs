@@ -11,16 +11,11 @@ public class CreateGasStationCommandHandlerTests
     private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
     private readonly IRepository<GasStation> _repository = Substitute.For<IRepository<GasStation>>();
 
-    public CreateGasStationCommandHandlerTests()
-    {
-        _unitOfWork.Repository<GasStation>().Returns(_repository);
-    }
-
     [Fact]
     public async Task HandleAsync_ValidCommand_ReturnsDto()
     {
         var command = new CreateGasStationCommand("Shell", "Via Roma 1", 45.0, 11.0);
-        var handler = new CreateGasStationCommandHandler(_unitOfWork);
+        var handler = new CreateGasStationCommandHandler(_repository, _unitOfWork);
 
         var result = await handler.HandleAsync(command);
 
@@ -35,7 +30,7 @@ public class CreateGasStationCommandHandlerTests
     public async Task HandleAsync_ValidCommand_CallsAddAndCommit()
     {
         var command = new CreateGasStationCommand("Shell", "Via Roma 1", 45.0, 11.0);
-        var handler = new CreateGasStationCommandHandler(_unitOfWork);
+        var handler = new CreateGasStationCommandHandler(_repository, _unitOfWork);
 
         await handler.HandleAsync(command);
 

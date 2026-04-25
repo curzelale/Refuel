@@ -11,11 +11,6 @@ public class UpdateGasStationCommandHandlerTests
     private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
     private readonly IRepository<GasStation> _repository = Substitute.For<IRepository<GasStation>>();
 
-    public UpdateGasStationCommandHandlerTests()
-    {
-        _unitOfWork.Repository<GasStation>().Returns(_repository);
-    }
-
     [Fact]
     public async Task HandleAsync_ExistingId_ReturnsUpdatedDto()
     {
@@ -23,7 +18,7 @@ public class UpdateGasStationCommandHandlerTests
         var existing = new GasStation("Shell", "Via Roma 1", 45.0, 11.0);
         _repository.GetByIdAsync(id).Returns(existing);
         var command = new UpdateGasStationCommand(id, "Eni", "Corso Italia 5", 46.0, 12.0);
-        var handler = new UpdateGasStationCommandHandler(_unitOfWork);
+        var handler = new UpdateGasStationCommandHandler(_repository, _unitOfWork);
 
         var result = await handler.HandleAsync(command);
 
@@ -38,7 +33,7 @@ public class UpdateGasStationCommandHandlerTests
         var existing = new GasStation("Shell", "Via Roma 1", 45.0, 11.0);
         _repository.GetByIdAsync(id).Returns(existing);
         var command = new UpdateGasStationCommand(id, "Eni", "Corso Italia 5", 46.0, 12.0);
-        var handler = new UpdateGasStationCommandHandler(_unitOfWork);
+        var handler = new UpdateGasStationCommandHandler(_repository, _unitOfWork);
 
         await handler.HandleAsync(command);
 
@@ -52,7 +47,7 @@ public class UpdateGasStationCommandHandlerTests
         var id = Guid.NewGuid();
         _repository.GetByIdAsync(id).Returns((GasStation?)null);
         var command = new UpdateGasStationCommand(id, "Eni", "Corso Italia 5", 46.0, 12.0);
-        var handler = new UpdateGasStationCommandHandler(_unitOfWork);
+        var handler = new UpdateGasStationCommandHandler(_repository, _unitOfWork);
 
         await Assert.ThrowsAsync<KeyNotFoundException>(() => handler.HandleAsync(command));
     }

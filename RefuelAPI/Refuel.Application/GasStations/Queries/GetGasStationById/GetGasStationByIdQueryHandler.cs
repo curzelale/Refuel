@@ -1,23 +1,23 @@
 using Refuel.Application.GasStations.Dtos;
 using Refuel.Application.Mediator;
-using Refuel.Application.UnitOfWork;
 using Refuel.Domain.Entities;
+using Refuel.Domain.Repositories;
 
 namespace Refuel.Application.GasStations.Queries.GetGasStationById;
 
 public class GetGasStationByIdQueryHandler : IRequestHandler<GetGasStationByIdQuery, GasStationDto?>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRepository<GasStation> _repository;
 
-    public GetGasStationByIdQueryHandler(IUnitOfWork unitOfWork)
+    public GetGasStationByIdQueryHandler(IRepository<GasStation> repository)
     {
-        _unitOfWork = unitOfWork;
+        _repository = repository;
     }
 
     public async Task<GasStationDto?> HandleAsync(GetGasStationByIdQuery request,
         CancellationToken cancellationToken = default)
     {
-        var gasStation = await _unitOfWork.Repository<GasStation>().GetByIdAsync(request.Id);
+        var gasStation = await _repository.GetByIdAsync(request.Id);
 
         return gasStation is null
             ? null

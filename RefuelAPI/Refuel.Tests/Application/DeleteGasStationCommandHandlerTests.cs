@@ -11,18 +11,13 @@ public class DeleteGasStationCommandHandlerTests
     private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
     private readonly IRepository<GasStation> _repository = Substitute.For<IRepository<GasStation>>();
 
-    public DeleteGasStationCommandHandlerTests()
-    {
-        _unitOfWork.Repository<GasStation>().Returns(_repository);
-    }
-
     [Fact]
     public async Task HandleAsync_ExistingId_DeletesAndCommits()
     {
         var id = Guid.NewGuid();
         var existing = new GasStation("Shell", "Via Roma 1", 45.0, 11.0);
         _repository.GetByIdAsync(id).Returns(existing);
-        var handler = new DeleteGasStationCommandHandler(_unitOfWork);
+        var handler = new DeleteGasStationCommandHandler(_repository, _unitOfWork);
 
         var result = await handler.HandleAsync(new DeleteGasStationCommand(id));
 
@@ -36,7 +31,7 @@ public class DeleteGasStationCommandHandlerTests
     {
         var id = Guid.NewGuid();
         _repository.GetByIdAsync(id).Returns((GasStation?)null);
-        var handler = new DeleteGasStationCommandHandler(_unitOfWork);
+        var handler = new DeleteGasStationCommandHandler(_repository, _unitOfWork);
 
         await Assert.ThrowsAsync<KeyNotFoundException>(() => handler.HandleAsync(new DeleteGasStationCommand(id)));
     }

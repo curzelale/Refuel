@@ -33,3 +33,8 @@ Accept: application/json
 
 GET {{RefuelAPI_HostAddress}}/api/v1/GasStations/acc888b3-9493-4335-be86-232a39655aa5
 Accept: application/json
+
+### Delete one
+
+DELETE {{RefuelAPI_HostAddress}}/api/v1/GasStations/233064b8-9622-412e-8272-bf17419a27aa
+Accept: application/json
