@@ -1,0 +1,34 @@
+@RefuelAPI_HostAddress = http://localhost:5094
+
+###Create
+
+POST {{RefuelAPI_HostAddress}}/api/v1/Fuels/
+Content-Type: application/json
+
+{
+  "Name": "Cancella"
+}
+
+###Update
+
+PUT {{RefuelAPI_HostAddress}}/api/v1/Fuels/4b78f14a-2a9b-46fa-9936-0d150617657d
+Content-Type: application/json
+
+{
+  "Name": "GPL"
+}
+
+
+### GetAll
+GET {{RefuelAPI_HostAddress}}/api/v1/Fuels/
+Accept: application/json
+
+### Get One
+
+GET {{RefuelAPI_HostAddress}}/api/v1/Fuels/3a701524-4f1c-4b7f-b2a7-82bc95b6e381
+Accept: application/json
+
+### Delete one
+
+DELETE {{RefuelAPI_HostAddress}}/api/v1/Fuels/c1254ecb-d754-472d-8513-deb7250489ca
+Accept: application/json

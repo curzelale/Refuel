@@ -19,8 +19,13 @@ public class Fuel
         Name = name;
         Id = Guid.NewGuid();
     }
-    
-    
+
+    public void Update(string name)
+    {
+        EnforceNameBusinessRules(name);
+        Name = name;
+    }
+
     private void EnforceNameBusinessRules(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
