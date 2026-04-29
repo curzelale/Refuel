@@ -1,3 +1,5 @@
+using Refuel.Application.Fuels.Dtos;
+
 namespace Refuel.Application.GasStations.Dtos;
 
 public record GasStationDto(
@@ -5,5 +7,6 @@ public record GasStationDto(
     string Name,
     string Address,
     double Latitude,
-    double Longitude
+    double Longitude,
+    IEnumerable<FuelDto> Fuels
 );

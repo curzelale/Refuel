@@ -9,14 +9,14 @@ namespace Refuel.Tests.Application;
 public class UpdateGasStationCommandHandlerTests
 {
     private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
-    private readonly IRepository<GasStation> _repository = Substitute.For<IRepository<GasStation>>();
+    private readonly IGasStationRepository _repository = Substitute.For<IGasStationRepository>();
 
     [Fact]
     public async Task HandleAsync_ExistingId_ReturnsUpdatedDto()
     {
         var id = Guid.NewGuid();
         var existing = new GasStation("Shell", "Via Roma 1", 45.0, 11.0);
-        _repository.GetByIdAsync(id).Returns(existing);
+        _repository.GetByIdWithFuelsAsync(id).Returns(existing);
         var command = new UpdateGasStationCommand(id, "Eni", "Corso Italia 5", 46.0, 12.0);
         var handler = new UpdateGasStationCommandHandler(_repository, _unitOfWork);
 
@@ -31,7 +31,7 @@ public class UpdateGasStationCommandHandlerTests
     {
         var id = Guid.NewGuid();
         var existing = new GasStation("Shell", "Via Roma 1", 45.0, 11.0);
-        _repository.GetByIdAsync(id).Returns(existing);
+        _repository.GetByIdWithFuelsAsync(id).Returns(existing);
         var command = new UpdateGasStationCommand(id, "Eni", "Corso Italia 5", 46.0, 12.0);
         var handler = new UpdateGasStationCommandHandler(_repository, _unitOfWork);
 
@@ -45,7 +45,7 @@ public class UpdateGasStationCommandHandlerTests
     public async Task HandleAsync_UnknownId_ThrowsKeyNotFoundException()
     {
         var id = Guid.NewGuid();
-        _repository.GetByIdAsync(id).Returns((GasStation?)null);
+        _repository.GetByIdWithFuelsAsync(id).Returns((GasStation?)null);
         var command = new UpdateGasStationCommand(id, "Eni", "Corso Italia 5", 46.0, 12.0);
         var handler = new UpdateGasStationCommandHandler(_repository, _unitOfWork);
 

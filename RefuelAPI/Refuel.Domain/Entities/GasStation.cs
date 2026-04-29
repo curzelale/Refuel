@@ -9,14 +9,14 @@ public class GasStation
     public string Address { get; private set; }
     public double Latitude { get; private set; }
     public double Longitude { get; private set; }
-    public IEnumerable<Fuel> Fuels { get; private set; }
+    public ICollection<Fuel> Fuels { get; private set; } = new List<Fuel>();
 
     //Empty constructor is required for ef-core migrations
     public GasStation()
     {
-        
+
     }
-    
+
     public GasStation(string name, string address, double latitude, double longitude)
     {
         EnforceNameBusinessRules(name);
@@ -42,6 +42,20 @@ public class GasStation
         Address = address;
         Latitude = latitude;
         Longitude = longitude;
+    }
+
+    public void AddFuel(Fuel fuel)
+    {
+        if (Fuels.Any(f => f.Id == fuel.Id))
+            return;
+        Fuels.Add(fuel);
+    }
+
+    public void RemoveFuel(Guid fuelId)
+    {
+        var fuel = Fuels.FirstOrDefault(f => f.Id == fuelId)
+            ?? throw new BusinessRuleException($"Fuel with id '{fuelId}' is not associated with this gas station.");
+        Fuels.Remove(fuel);
     }
 
     private void EnforceNameBusinessRules(string name)

@@ -1,15 +1,15 @@
+using Refuel.Application.Fuels.Dtos;
 using Refuel.Application.GasStations.Dtos;
 using Refuel.Application.Mediator;
-using Refuel.Domain.Entities;
 using Refuel.Domain.Repositories;
 
 namespace Refuel.Application.GasStations.Queries.GetAllGasStations;
 
 public class GetAllGasStationsQueryHandler : IRequestHandler<GetAllGasStationsQuery, IEnumerable<GasStationDto>>
 {
-    private readonly IRepository<GasStation> _repository;
+    private readonly IGasStationRepository _repository;
 
-    public GetAllGasStationsQueryHandler(IRepository<GasStation> repository)
+    public GetAllGasStationsQueryHandler(IGasStationRepository repository)
     {
         _repository = repository;
     }
@@ -17,8 +17,10 @@ public class GetAllGasStationsQueryHandler : IRequestHandler<GetAllGasStationsQu
     public async Task<IEnumerable<GasStationDto>> HandleAsync(GetAllGasStationsQuery request,
         CancellationToken cancellationToken = default)
     {
-        var gasStations = await _repository.GetAllAsync();
+        var gasStations = await _repository.GetAllWithFuelsAsync();
 
-        return gasStations.Select(gs => new GasStationDto(gs.Id, gs.Name, gs.Address, gs.Latitude, gs.Longitude));
+        return gasStations.Select(gs => new GasStationDto(
+            gs.Id, gs.Name, gs.Address, gs.Latitude, gs.Longitude,
+            gs.Fuels.Select(f => new FuelDto(f.Id, f.Name))));
     }
 }

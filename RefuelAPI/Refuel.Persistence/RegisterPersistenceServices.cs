@@ -17,6 +17,7 @@ public static class RegisterPersistenceServices
         //Crea il db ed applica le migrazioni se necessario
         services.AddHostedService<DatabaseMigrationService>();
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped<IGasStationRepository, GasStationRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
 
         return services;

@@ -13,7 +13,7 @@ public class MediatorServiceTests
     [Fact]
     public async Task SendAsync_RegisteredHandler_InvokesHandlerAndReturnsResult()
     {
-        var expectedDto = new GasStationDto(Guid.NewGuid(), "Shell", "Via Roma 1", 45.0, 11.0);
+        var expectedDto = new GasStationDto(Guid.NewGuid(), "Shell", "Via Roma 1", 45.0, 11.0, []);
         var handler = Substitute.For<IRequestHandler<GetGasStationByIdQuery, GasStationDto?>>();
         handler.HandleAsync(Arg.Any<GetGasStationByIdQuery>(), Arg.Any<CancellationToken>())
             .Returns(expectedDto);
@@ -59,7 +59,7 @@ public class MediatorServiceTests
     [Fact]
     public async Task SendAsync_ValidCommandWithValidator_InvokesHandler()
     {
-        var dto = new GasStationDto(Guid.NewGuid(), "Shell", "Via Roma 1", 45.0, 11.0);
+        var dto = new GasStationDto(Guid.NewGuid(), "Shell", "Via Roma 1", 45.0, 11.0, []);
         var handler = Substitute.For<IRequestHandler<CreateGasStationCommand, GasStationDto>>();
         handler.HandleAsync(Arg.Any<CreateGasStationCommand>(), Arg.Any<CancellationToken>()).Returns(dto);
         var services = new ServiceCollection();

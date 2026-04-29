@@ -38,3 +38,19 @@ Accept: application/json
 
 DELETE {{RefuelAPI_HostAddress}}/api/v1/GasStations/233064b8-9622-412e-8272-bf17419a27aa
 Accept: application/json
+
+
+### Add Fuel
+
+PUT {{RefuelAPI_HostAddress}}/api/v1/GasStations/acc888b3-9493-4335-be86-232a39655aa5/fuels/3a701524-4f1c-4b7f-b2a7-82bc95b6e381
+Content-Type: application/json
+
+### Get Fuels
+
+GET {{RefuelAPI_HostAddress}}/api/v1/GasStations/acc888b3-9493-4335-be86-232a39655aa5/fuels
+Accept: application/json
+
+### Add Fuel
+
+DELETE {{RefuelAPI_HostAddress}}/api/v1/GasStations/acc888b3-9493-4335-be86-232a39655aa5/fuels/3a701524-4f1c-4b7f-b2a7-82bc95b6e381
+Content-Type: application/json

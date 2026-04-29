@@ -26,6 +26,6 @@ public class CreateGasStationCommandHandler : IRequestHandler<CreateGasStationCo
         await _unitOfWork.CommitAsync(cancellationToken);
 
         return new GasStationDto(gasStation.Id, gasStation.Name, gasStation.Address, gasStation.Latitude,
-            gasStation.Longitude);
+            gasStation.Longitude, Enumerable.Empty<Fuels.Dtos.FuelDto>());
     }
 }

@@ -1,16 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
+using Refuel.Application.Fuels.Dtos;
+using Refuel.Application.GasStations.Commands.AddFuelToGasStation;
 using Refuel.Application.GasStations.Commands.CreateGasStation;
 using Refuel.Application.GasStations.Commands.DeleteGasStation;
+using Refuel.Application.GasStations.Commands.RemoveFuelFromGasStation;
 using Refuel.Application.GasStations.Commands.UpdateGasStation;
 using Refuel.Application.GasStations.Dtos;
 using Refuel.Application.GasStations.Queries.GetAllGasStations;
+using Refuel.Application.GasStations.Queries.GetFuelsForGasStation;
 using Refuel.Application.GasStations.Queries.GetGasStationById;
 using Refuel.Application.Mediator;
 using RefuelAPI.Controllers.V1.Requests;
 
 namespace RefuelAPI.Controllers.V1;
 
-//TODO: Gestire i carburanti
 //TODO: Se l'indirizzo non viene compilato fare il geocoding in automatico
 //TODO: Bloccare la cancellazione se ci sono rifornimenti collegati
 
@@ -64,5 +67,30 @@ public class GasStationsController : ControllerBase
     {
         await _mediator.SendAsync<bool>(new DeleteGasStationCommand(id), cancellationToken);
         return NoContent();
+    }
+
+    [HttpGet("{id:guid}/fuels")]
+    public async Task<IActionResult> GetFuels(Guid id, CancellationToken cancellationToken)
+    {
+        var result =
+            await _mediator.SendAsync<IEnumerable<FuelDto>?>(new GetFuelsForGasStationQuery(id), cancellationToken);
+        return result is null ? NotFound() : Ok(result);
+    }
+
+    [HttpPut("{id:guid}/fuels/{fuelId:guid}")]
+    public async Task<IActionResult> AddFuel(Guid id, Guid fuelId, CancellationToken cancellationToken)
+    {
+        var result =
+            await _mediator.SendAsync<GasStationDto>(new AddFuelToGasStationCommand(id, fuelId), cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpDelete("{id:guid}/fuels/{fuelId:guid}")]
+    public async Task<IActionResult> RemoveFuel(Guid id, Guid fuelId, CancellationToken cancellationToken)
+    {
+        var result =
+            await _mediator.SendAsync<GasStationDto>(new RemoveFuelFromGasStationCommand(id, fuelId),
+                cancellationToken);
+        return Ok(result);
     }
 }
