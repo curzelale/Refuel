@@ -18,6 +18,7 @@ public static class RegisterPersistenceServices
         services.AddHostedService<DatabaseMigrationService>();
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IGasStationRepository, GasStationRepository>();
+        services.AddScoped<IVehicleRepository, VehicleRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
 
         return services;

@@ -8,8 +8,7 @@ public class Vehicle
     public string Brand { get; private set; }
     public string Model { get; private set; }
     public string Owner { get; private set; }
-    public IEnumerable<Fuel> Fuels { get; private set; }
-
+    public ICollection<Fuel> Fuels { get; private set; } = new List<Fuel>();
 
     //Empty constructor is required for ef-core migrations
     public Vehicle()
@@ -26,6 +25,13 @@ public class Vehicle
         Brand = brand;
         Model = model;
         Owner = owner;
+    }
+
+    public void AddFuel(Fuel fuel)
+    {
+        if (Fuels.Any(f => f.Id == fuel.Id))
+            return;
+        Fuels.Add(fuel);
     }
 
     private void EnforceBrandBusinessRules(string brand)

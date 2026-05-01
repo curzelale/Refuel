@@ -1,0 +1,24 @@
+@RefuelAPI_HostAddress = http://localhost:5094
+
+###Create
+
+POST {{RefuelAPI_HostAddress}}/api/v1/Vehicles/
+Content-Type: application/json
+
+{
+  "Brand": "Alfa Romeo",
+  "Model": "Giulia",
+  "Owner": "Ale4",
+  "FuelIds": ["3a701524-4f1c-4b7f-b2a7-82bc95b6e381"]
+}
+
+
+### Get All
+GET {{RefuelAPI_HostAddress}}/api/v1/Vehicles
+Accept: application/json
+
+
+### Get by id 
+
+GET {{RefuelAPI_HostAddress}}/api/v1/Vehicles/26a316cf-68af-4f01-b911-7ee40d72bf01
+Accept: application/json
