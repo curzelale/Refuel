@@ -1,4 +1,4 @@
-using Refuel.Application.Mediator;
+using Mediator;
 using Refuel.Application.UnitOfWork;
 using Refuel.Domain.Entities;
 using Refuel.Domain.Repositories;
@@ -16,7 +16,7 @@ public class DeleteGasStationCommandHandler : IRequestHandler<DeleteGasStationCo
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<bool> HandleAsync(DeleteGasStationCommand request, CancellationToken cancellationToken = default)
+    public async ValueTask<bool> Handle(DeleteGasStationCommand request, CancellationToken cancellationToken = default)
     {
         var gasStation = await _repository.GetByIdAsync(request.Id)
                          ?? throw new KeyNotFoundException($"GasStation with id '{request.Id}' was not found.");

@@ -20,7 +20,7 @@ Content-Type: application/json
 {
   "Name": "Firmin",
   "Address": "Caldonazzo",
-  "Latitude": 470,
+  "Latitude": 47,
   "Longitude": 11
 }
 

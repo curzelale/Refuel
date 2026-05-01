@@ -1,6 +1,6 @@
 using Refuel.Application.Fuels.Dtos;
 using Refuel.Application.GasStations.Dtos;
-using Refuel.Application.Mediator;
+using Mediator;
 using Refuel.Domain.Repositories;
 
 namespace Refuel.Application.GasStations.Queries.GetAllGasStations;
@@ -14,7 +14,7 @@ public class GetAllGasStationsQueryHandler : IRequestHandler<GetAllGasStationsQu
         _repository = repository;
     }
 
-    public async Task<IEnumerable<GasStationDto>> HandleAsync(GetAllGasStationsQuery request,
+    public async ValueTask<IEnumerable<GasStationDto>> Handle(GetAllGasStationsQuery request,
         CancellationToken cancellationToken = default)
     {
         var gasStations = await _repository.GetAllWithFuelsAsync();

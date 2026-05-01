@@ -20,7 +20,7 @@ public class UpdateGasStationCommandHandlerTests
         var command = new UpdateGasStationCommand(id, "Eni", "Corso Italia 5", 46.0, 12.0);
         var handler = new UpdateGasStationCommandHandler(_repository, _unitOfWork);
 
-        var result = await handler.HandleAsync(command);
+        var result = await handler.Handle(command);
 
         Assert.Equal("Eni", result.Name);
         Assert.Equal("Corso Italia 5", result.Address);
@@ -35,7 +35,7 @@ public class UpdateGasStationCommandHandlerTests
         var command = new UpdateGasStationCommand(id, "Eni", "Corso Italia 5", 46.0, 12.0);
         var handler = new UpdateGasStationCommandHandler(_repository, _unitOfWork);
 
-        await handler.HandleAsync(command);
+        await handler.Handle(command);
 
         _repository.Received(1).Update(existing);
         await _unitOfWork.Received(1).CommitAsync(Arg.Any<CancellationToken>());
@@ -49,6 +49,6 @@ public class UpdateGasStationCommandHandlerTests
         var command = new UpdateGasStationCommand(id, "Eni", "Corso Italia 5", 46.0, 12.0);
         var handler = new UpdateGasStationCommandHandler(_repository, _unitOfWork);
 
-        await Assert.ThrowsAsync<KeyNotFoundException>(() => handler.HandleAsync(command));
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => handler.Handle(command).AsTask());
     }
 }

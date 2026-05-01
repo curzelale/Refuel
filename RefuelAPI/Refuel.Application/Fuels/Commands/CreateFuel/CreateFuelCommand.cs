@@ -1,5 +1,5 @@
 using Refuel.Application.Fuels.Dtos;
-using Refuel.Application.Mediator;
+using Mediator;
 
 namespace Refuel.Application.Fuels.Commands.CreateFuel;
 

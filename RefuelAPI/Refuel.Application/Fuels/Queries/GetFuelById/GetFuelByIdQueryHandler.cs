@@ -1,5 +1,5 @@
 using Refuel.Application.Fuels.Dtos;
-using Refuel.Application.Mediator;
+using Mediator;
 using Refuel.Domain.Entities;
 using Refuel.Domain.Repositories;
 
@@ -14,7 +14,7 @@ public class GetFuelByIdQueryHandler : IRequestHandler<GetFuelByIdQuery, FuelDto
         _repository = repository;
     }
 
-    public async Task<FuelDto?> HandleAsync(GetFuelByIdQuery request, CancellationToken cancellationToken = default)
+    public async ValueTask<FuelDto?> Handle(GetFuelByIdQuery request, CancellationToken cancellationToken = default)
     {
         var fuel = await _repository.GetByIdAsync(request.Id);
         return fuel is null ? null : new FuelDto(fuel.Id, fuel.Name);

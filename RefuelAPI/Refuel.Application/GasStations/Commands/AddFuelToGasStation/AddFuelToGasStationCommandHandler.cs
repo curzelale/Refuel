@@ -1,5 +1,5 @@
 using Refuel.Application.GasStations.Dtos;
-using Refuel.Application.Mediator;
+using Mediator;
 using Refuel.Application.UnitOfWork;
 using Refuel.Domain.Entities;
 using Refuel.Domain.Repositories;
@@ -22,7 +22,7 @@ public class AddFuelToGasStationCommandHandler : IRequestHandler<AddFuelToGasSta
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<GasStationDto> HandleAsync(AddFuelToGasStationCommand request,
+    public async ValueTask<GasStationDto> Handle(AddFuelToGasStationCommand request,
         CancellationToken cancellationToken = default)
     {
         var gasStation = await _gasStationRepository.GetByIdWithFuelsAsync(request.GasStationId)

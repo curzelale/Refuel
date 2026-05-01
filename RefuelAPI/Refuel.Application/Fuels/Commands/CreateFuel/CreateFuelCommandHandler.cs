@@ -1,5 +1,5 @@
 using Refuel.Application.Fuels.Dtos;
-using Refuel.Application.Mediator;
+using Mediator;
 using Refuel.Application.UnitOfWork;
 using Refuel.Domain.Entities;
 using Refuel.Domain.Repositories;
@@ -17,7 +17,7 @@ public class CreateFuelCommandHandler : IRequestHandler<CreateFuelCommand, FuelD
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<FuelDto> HandleAsync(CreateFuelCommand request, CancellationToken cancellationToken = default)
+    public async ValueTask<FuelDto> Handle(CreateFuelCommand request, CancellationToken cancellationToken = default)
     {
         var fuel = new Fuel(request.Name);
 

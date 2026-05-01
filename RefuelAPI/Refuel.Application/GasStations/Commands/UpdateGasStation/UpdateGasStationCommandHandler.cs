@@ -1,6 +1,6 @@
 using Refuel.Application.Fuels.Dtos;
 using Refuel.Application.GasStations.Dtos;
-using Refuel.Application.Mediator;
+using Mediator;
 using Refuel.Application.UnitOfWork;
 using Refuel.Domain.Repositories;
 
@@ -17,7 +17,7 @@ public class UpdateGasStationCommandHandler : IRequestHandler<UpdateGasStationCo
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<GasStationDto> HandleAsync(UpdateGasStationCommand request,
+    public async ValueTask<GasStationDto> Handle(UpdateGasStationCommand request,
         CancellationToken cancellationToken = default)
     {
         var gasStation = await _repository.GetByIdWithFuelsAsync(request.Id)

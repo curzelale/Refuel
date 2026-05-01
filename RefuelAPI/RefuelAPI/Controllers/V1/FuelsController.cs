@@ -1,3 +1,4 @@
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Refuel.Application.Fuels.Commands.CreateFuel;
 using Refuel.Application.Fuels.Commands.DeleteFuel;
@@ -5,7 +6,6 @@ using Refuel.Application.Fuels.Commands.UpdateFuel;
 using Refuel.Application.Fuels.Dtos;
 using Refuel.Application.Fuels.Queries.GetAllFuels;
 using Refuel.Application.Fuels.Queries.GetFuelById;
-using Refuel.Application.Mediator;
 using RefuelAPI.Controllers.V1.Requests;
 
 namespace RefuelAPI.Controllers.V1;
@@ -26,14 +26,14 @@ public class FuelsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var result = await _mediator.SendAsync<IEnumerable<FuelDto>>(new GetAllFuelsQuery(), cancellationToken);
+        var result = await _mediator.Send(new GetAllFuelsQuery(), cancellationToken);
         return Ok(result);
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
     {
-        var result = await _mediator.SendAsync<FuelDto?>(new GetFuelByIdQuery(id), cancellationToken);
+        var result = await _mediator.Send(new GetFuelByIdQuery(id), cancellationToken);
         return result is null ? NotFound() : Ok(result);
     }
 
@@ -41,7 +41,7 @@ public class FuelsController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateFuelRequest request, CancellationToken cancellationToken)
     {
         var command = new CreateFuelCommand(request.Name);
-        var result = await _mediator.SendAsync<FuelDto>(command, cancellationToken);
+        var result = await _mediator.Send(command, cancellationToken);
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
 
@@ -50,14 +50,14 @@ public class FuelsController : ControllerBase
         CancellationToken cancellationToken)
     {
         var command = new UpdateFuelCommand(id, request.Name);
-        var result = await _mediator.SendAsync<FuelDto>(command, cancellationToken);
+        var result = await _mediator.Send(command, cancellationToken);
         return Ok(result);
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
-        await _mediator.SendAsync<bool>(new DeleteFuelCommand(id), cancellationToken);
+        await _mediator.Send(new DeleteFuelCommand(id), cancellationToken);
         return NoContent();
     }
 }

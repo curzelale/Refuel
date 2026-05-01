@@ -1,75 +1,71 @@
 using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
+using Mediator;
 using NSubstitute;
 using Refuel.Application.GasStations.Commands.CreateGasStation;
 using Refuel.Application.GasStations.Dtos;
-using Refuel.Application.GasStations.Queries.GetGasStationById;
-using Refuel.Application.Mediator;
+using Refuel.Application.Pipeline;
 
 namespace Refuel.Tests.Application;
 
-public class MediatorServiceTests
+public class ValidationPipelineBehaviorTests
 {
-    [Fact]
-    public async Task SendAsync_RegisteredHandler_InvokesHandlerAndReturnsResult()
+    private readonly MessageHandlerDelegate<CreateGasStationCommand, GasStationDto> _next;
+    private readonly GasStationDto _expectedDto = new(Guid.NewGuid(), "Shell", "Via Roma 1", 45.0, 11.0, []);
+
+    public ValidationPipelineBehaviorTests()
     {
-        var expectedDto = new GasStationDto(Guid.NewGuid(), "Shell", "Via Roma 1", 45.0, 11.0, []);
-        var handler = Substitute.For<IRequestHandler<GetGasStationByIdQuery, GasStationDto?>>();
-        handler.HandleAsync(Arg.Any<GetGasStationByIdQuery>(), Arg.Any<CancellationToken>())
-            .Returns(expectedDto);
-
-        var services = new ServiceCollection();
-        services.AddSingleton<IRequestHandler<GetGasStationByIdQuery, GasStationDto?>>(handler);
-        var provider = services.BuildServiceProvider();
-
-        var mediator = new MediatorService(provider);
-        var query = new GetGasStationByIdQuery(expectedDto.Id);
-
-        var result = await mediator.SendAsync<GasStationDto?>(query);
-
-        Assert.Equal(expectedDto, result);
-        await handler.Received(1).HandleAsync(query, Arg.Any<CancellationToken>());
+        _next = Substitute.For<MessageHandlerDelegate<CreateGasStationCommand, GasStationDto>>();
+        _next.Invoke(Arg.Any<CreateGasStationCommand>(), Arg.Any<CancellationToken>())
+             .Returns(new ValueTask<GasStationDto>(_expectedDto));
     }
 
     [Fact]
-    public async Task SendAsync_UnregisteredHandler_ThrowsInvalidOperationException()
+    public async Task Handle_NoValidators_CallsNext()
     {
-        var provider = new ServiceCollection().BuildServiceProvider();
-        var mediator = new MediatorService(provider);
+        var behavior = new ValidationPipelineBehavior<CreateGasStationCommand, GasStationDto>([]);
+        var command = new CreateGasStationCommand("Shell", "Via Roma 1", 45.0, 11.0);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() =>
-            mediator.SendAsync<GasStationDto?>(new GetGasStationByIdQuery(Guid.NewGuid())));
+        var result = await behavior.Handle(command, _next, CancellationToken.None);
+
+        Assert.Equal(_expectedDto, result);
+        await _next.Received(1).Invoke(command, Arg.Any<CancellationToken>());
     }
 
     [Fact]
-    public async Task SendAsync_InvalidCommand_ThrowsValidationException_HandlerNotInvoked()
+    public async Task Handle_ValidCommand_CallsNext()
     {
-        var handler = Substitute.For<IRequestHandler<CreateGasStationCommand, GasStationDto>>();
-        var services = new ServiceCollection();
-        services.AddSingleton(handler);
-        services.AddScoped<IValidator<CreateGasStationCommand>, CreateGasStationCommandValidator>();
-        var mediator = new MediatorService(services.BuildServiceProvider());
+        var validators = new IValidator<CreateGasStationCommand>[] { new CreateGasStationCommandValidator() };
+        var behavior = new ValidationPipelineBehavior<CreateGasStationCommand, GasStationDto>(validators);
+        var command = new CreateGasStationCommand("Shell", "Via Roma 1", 45.0, 11.0);
 
-        await Assert.ThrowsAsync<Refuel.Application.Exceptions.ValidationException>(() =>
-            mediator.SendAsync<GasStationDto>(new CreateGasStationCommand("", "Via Roma 1", 45.0, 11.0)));
+        var result = await behavior.Handle(command, _next, CancellationToken.None);
 
-        await handler.DidNotReceive().HandleAsync(Arg.Any<CreateGasStationCommand>(), Arg.Any<CancellationToken>());
+        Assert.Equal(_expectedDto, result);
+        await _next.Received(1).Invoke(command, Arg.Any<CancellationToken>());
     }
 
     [Fact]
-    public async Task SendAsync_ValidCommandWithValidator_InvokesHandler()
+    public async Task Handle_InvalidCommand_ThrowsValidationException_NextNotCalled()
     {
-        var dto = new GasStationDto(Guid.NewGuid(), "Shell", "Via Roma 1", 45.0, 11.0, []);
-        var handler = Substitute.For<IRequestHandler<CreateGasStationCommand, GasStationDto>>();
-        handler.HandleAsync(Arg.Any<CreateGasStationCommand>(), Arg.Any<CancellationToken>()).Returns(dto);
-        var services = new ServiceCollection();
-        services.AddSingleton(handler);
-        services.AddScoped<IValidator<CreateGasStationCommand>, CreateGasStationCommandValidator>();
-        var mediator = new MediatorService(services.BuildServiceProvider());
+        var validators = new IValidator<CreateGasStationCommand>[] { new CreateGasStationCommandValidator() };
+        var behavior = new ValidationPipelineBehavior<CreateGasStationCommand, GasStationDto>(validators);
+        var invalid = new CreateGasStationCommand("", "Via Roma 1", 45.0, 11.0);
 
-        var result =
-            await mediator.SendAsync<GasStationDto>(new CreateGasStationCommand("Shell", "Via Roma 1", 45.0, 11.0));
+        await Assert.ThrowsAsync<Refuel.Application.Exceptions.ValidationException>(
+            () => behavior.Handle(invalid, _next, CancellationToken.None).AsTask());
 
-        Assert.Equal(dto, result);
+        await _next.DidNotReceive().Invoke(Arg.Any<CreateGasStationCommand>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Handle_ValidCommandWithValidator_ReturnsResult()
+    {
+        var validators = new IValidator<CreateGasStationCommand>[] { new CreateGasStationCommandValidator() };
+        var behavior = new ValidationPipelineBehavior<CreateGasStationCommand, GasStationDto>(validators);
+        var command = new CreateGasStationCommand("Shell", "Via Roma 1", 45.0, 11.0);
+
+        var result = await behavior.Handle(command, _next, CancellationToken.None);
+
+        Assert.Equal(_expectedDto, result);
     }
 }

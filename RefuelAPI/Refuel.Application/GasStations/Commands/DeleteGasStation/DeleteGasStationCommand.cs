@@ -1,4 +1,4 @@
-using Refuel.Application.Mediator;
+using Mediator;
 
 namespace Refuel.Application.GasStations.Commands.DeleteGasStation;
 

@@ -1,3 +1,4 @@
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Refuel.Application.Fuels.Dtos;
 using Refuel.Application.GasStations.Commands.AddFuelToGasStation;
@@ -9,7 +10,6 @@ using Refuel.Application.GasStations.Dtos;
 using Refuel.Application.GasStations.Queries.GetAllGasStations;
 using Refuel.Application.GasStations.Queries.GetFuelsForGasStation;
 using Refuel.Application.GasStations.Queries.GetGasStationById;
-using Refuel.Application.Mediator;
 using RefuelAPI.Controllers.V1.Requests;
 
 namespace RefuelAPI.Controllers.V1;
@@ -31,15 +31,14 @@ public class GasStationsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var result =
-            await _mediator.SendAsync<IEnumerable<GasStationDto>>(new GetAllGasStationsQuery(), cancellationToken);
+        var result = await _mediator.Send(new GetAllGasStationsQuery(), cancellationToken);
         return Ok(result);
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
     {
-        var result = await _mediator.SendAsync<GasStationDto?>(new GetGasStationByIdQuery(id), cancellationToken);
+        var result = await _mediator.Send(new GetGasStationByIdQuery(id), cancellationToken);
         return result is null ? NotFound() : Ok(result);
     }
 
@@ -48,7 +47,7 @@ public class GasStationsController : ControllerBase
         CancellationToken cancellationToken)
     {
         var command = new CreateGasStationCommand(request.Name, request.Address, request.Latitude, request.Longitude);
-        var result = await _mediator.SendAsync<GasStationDto>(command, cancellationToken);
+        var result = await _mediator.Send(command, cancellationToken);
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
 
@@ -58,39 +57,35 @@ public class GasStationsController : ControllerBase
     {
         var command =
             new UpdateGasStationCommand(id, request.Name, request.Address, request.Latitude, request.Longitude);
-        var result = await _mediator.SendAsync<GasStationDto>(command, cancellationToken);
+        var result = await _mediator.Send(command, cancellationToken);
         return Ok(result);
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
-        await _mediator.SendAsync<bool>(new DeleteGasStationCommand(id), cancellationToken);
+        await _mediator.Send(new DeleteGasStationCommand(id), cancellationToken);
         return NoContent();
     }
 
     [HttpGet("{id:guid}/fuels")]
     public async Task<IActionResult> GetFuels(Guid id, CancellationToken cancellationToken)
     {
-        var result =
-            await _mediator.SendAsync<IEnumerable<FuelDto>?>(new GetFuelsForGasStationQuery(id), cancellationToken);
+        var result = await _mediator.Send(new GetFuelsForGasStationQuery(id), cancellationToken);
         return result is null ? NotFound() : Ok(result);
     }
 
     [HttpPut("{id:guid}/fuels/{fuelId:guid}")]
     public async Task<IActionResult> AddFuel(Guid id, Guid fuelId, CancellationToken cancellationToken)
     {
-        var result =
-            await _mediator.SendAsync<GasStationDto>(new AddFuelToGasStationCommand(id, fuelId), cancellationToken);
+        var result = await _mediator.Send(new AddFuelToGasStationCommand(id, fuelId), cancellationToken);
         return Ok(result);
     }
 
     [HttpDelete("{id:guid}/fuels/{fuelId:guid}")]
     public async Task<IActionResult> RemoveFuel(Guid id, Guid fuelId, CancellationToken cancellationToken)
     {
-        var result =
-            await _mediator.SendAsync<GasStationDto>(new RemoveFuelFromGasStationCommand(id, fuelId),
-                cancellationToken);
+        var result = await _mediator.Send(new RemoveFuelFromGasStationCommand(id, fuelId), cancellationToken);
         return Ok(result);
     }
 }

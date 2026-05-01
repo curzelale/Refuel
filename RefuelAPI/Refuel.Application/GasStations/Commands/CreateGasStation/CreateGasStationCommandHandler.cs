@@ -1,5 +1,5 @@
 using Refuel.Application.GasStations.Dtos;
-using Refuel.Application.Mediator;
+using Mediator;
 using Refuel.Application.UnitOfWork;
 using Refuel.Domain.Entities;
 using Refuel.Domain.Repositories;
@@ -17,7 +17,7 @@ public class CreateGasStationCommandHandler : IRequestHandler<CreateGasStationCo
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<GasStationDto> HandleAsync(CreateGasStationCommand request,
+    public async ValueTask<GasStationDto> Handle(CreateGasStationCommand request,
         CancellationToken cancellationToken = default)
     {
         var gasStation = new GasStation(request.Name, request.Address, request.Latitude, request.Longitude);

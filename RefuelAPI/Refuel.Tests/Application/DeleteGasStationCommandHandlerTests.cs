@@ -19,7 +19,7 @@ public class DeleteGasStationCommandHandlerTests
         _repository.GetByIdAsync(id).Returns(existing);
         var handler = new DeleteGasStationCommandHandler(_repository, _unitOfWork);
 
-        var result = await handler.HandleAsync(new DeleteGasStationCommand(id));
+        var result = await handler.Handle(new DeleteGasStationCommand(id));
 
         Assert.True(result);
         _repository.Received(1).Delete(existing);
@@ -33,6 +33,6 @@ public class DeleteGasStationCommandHandlerTests
         _repository.GetByIdAsync(id).Returns((GasStation?)null);
         var handler = new DeleteGasStationCommandHandler(_repository, _unitOfWork);
 
-        await Assert.ThrowsAsync<KeyNotFoundException>(() => handler.HandleAsync(new DeleteGasStationCommand(id)));
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => handler.Handle(new DeleteGasStationCommand(id)).AsTask());
     }
 }

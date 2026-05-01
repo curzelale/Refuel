@@ -17,7 +17,7 @@ public class CreateGasStationCommandHandlerTests
         var command = new CreateGasStationCommand("Shell", "Via Roma 1", 45.0, 11.0);
         var handler = new CreateGasStationCommandHandler(_repository, _unitOfWork);
 
-        var result = await handler.HandleAsync(command);
+        var result = await handler.Handle(command);
 
         Assert.Equal("Shell", result.Name);
         Assert.Equal("Via Roma 1", result.Address);
@@ -32,7 +32,7 @@ public class CreateGasStationCommandHandlerTests
         var command = new CreateGasStationCommand("Shell", "Via Roma 1", 45.0, 11.0);
         var handler = new CreateGasStationCommandHandler(_repository, _unitOfWork);
 
-        await handler.HandleAsync(command);
+        await handler.Handle(command);
 
         await _repository.Received(1).AddAsync(Arg.Any<GasStation>());
         await _unitOfWork.Received(1).CommitAsync(Arg.Any<CancellationToken>());

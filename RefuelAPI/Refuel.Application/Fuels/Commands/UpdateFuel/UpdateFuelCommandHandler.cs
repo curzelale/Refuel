@@ -1,5 +1,5 @@
 using Refuel.Application.Fuels.Dtos;
-using Refuel.Application.Mediator;
+using Mediator;
 using Refuel.Application.UnitOfWork;
 using Refuel.Domain.Entities;
 using Refuel.Domain.Repositories;
@@ -17,7 +17,7 @@ public class UpdateFuelCommandHandler : IRequestHandler<UpdateFuelCommand, FuelD
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<FuelDto> HandleAsync(UpdateFuelCommand request, CancellationToken cancellationToken = default)
+    public async ValueTask<FuelDto> Handle(UpdateFuelCommand request, CancellationToken cancellationToken = default)
     {
         var fuel = await _repository.GetByIdAsync(request.Id)
                    ?? throw new KeyNotFoundException($"Fuel with id '{request.Id}' was not found.");
