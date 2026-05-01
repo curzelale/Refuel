@@ -7,5 +7,7 @@ public record VehicleDto(
     string Brand,
     string Model,
     string Owner,
-    IEnumerable<FuelDto> Fuels
+    IEnumerable<FuelDto> Fuels,
+    string? Nickname,
+    string? LicencesPlate
 );

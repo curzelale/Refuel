@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Refuel.Persistence;
 
@@ -10,9 +11,11 @@ using Refuel.Persistence;
 namespace Refuel.Persistence.Migrations
 {
     [DbContext(typeof(RefuelDbContext))]
-    partial class RefuelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260501155951_VehiclesPlateNickname")]
+    partial class VehiclesPlateNickname
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.7");

@@ -7,5 +7,7 @@ public record CreateVehicleCommand(
     string Brand,
     string Model,
     string Owner,
-    IEnumerable<Guid> FuelIds
-    ) : IRequest<VehicleDto>;
+    IEnumerable<Guid> FuelIds,
+    string? Nickname,
+    string? LicencesPlate
+) : IRequest<VehicleDto>;

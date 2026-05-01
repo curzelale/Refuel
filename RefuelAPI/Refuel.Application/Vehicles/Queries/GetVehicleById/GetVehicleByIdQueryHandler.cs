@@ -25,6 +25,8 @@ public class GetVehicleByIdQueryHandler : IRequestHandler<GetVehicleByIdQuery, V
                 vehicle.Brand, 
                 vehicle.Model, 
                 vehicle.Owner, 
-                vehicle.Fuels.Select(f => new FuelDto(f.Id, f.Name)));
+                vehicle.Fuels.Select(f => new FuelDto(f.Id, f.Name)),
+                vehicle.Nickname,
+                vehicle.LicencesPlate);
     }
 }

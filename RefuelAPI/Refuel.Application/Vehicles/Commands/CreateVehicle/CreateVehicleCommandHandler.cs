@@ -30,7 +30,7 @@ public class CreateVehicleCommandHandler : IRequestHandler<CreateVehicleCommand,
         if (missingId != default)
             throw new KeyNotFoundException($"Fuel with id '{missingId}' was not found.");
 
-        var vehicle = new Vehicle(request.Brand, request.Model, request.Owner);
+        var vehicle = new Vehicle(request.Brand, request.Model, request.Owner, request.Nickname, request.LicencesPlate);
 
         foreach (var fuelId in request.FuelIds)
             vehicle.AddFuel(allFuels[fuelId]);
@@ -39,6 +39,6 @@ public class CreateVehicleCommandHandler : IRequestHandler<CreateVehicleCommand,
         await _unitOfWork.CommitAsync(cancellationToken);
 
         return new VehicleDto(vehicle.Id, vehicle.Brand, vehicle.Model, vehicle.Owner,
-            vehicle.Fuels.Select(f => new Fuels.Dtos.FuelDto(f.Id, f.Name)));
+            vehicle.Fuels.Select(f => new Fuels.Dtos.FuelDto(f.Id, f.Name)), vehicle.Nickname, vehicle.LicencesPlate);
     }
 }

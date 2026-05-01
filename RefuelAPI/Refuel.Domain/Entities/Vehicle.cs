@@ -8,6 +8,9 @@ public class Vehicle
     public string Brand { get; private set; }
     public string Model { get; private set; }
     public string Owner { get; private set; }
+    
+    public string? Nickname { get; private set; }
+    public string? LicencesPlate { get; private set; }
     public ICollection<Fuel> Fuels { get; private set; } = new List<Fuel>();
 
     //Empty constructor is required for ef-core migrations
@@ -15,7 +18,7 @@ public class Vehicle
     {
     }
 
-    public Vehicle(string brand, string model, string owner)
+    public Vehicle(string brand, string model, string owner, string? nickname, string? licencesPlate)
     {
         EnforceBrandBusinessRules(brand);
         EnforceModelBusinessRules(model);
@@ -25,6 +28,8 @@ public class Vehicle
         Brand = brand;
         Model = model;
         Owner = owner;
+        Nickname = nickname;
+        LicencesPlate = licencesPlate;
     }
 
     public void AddFuel(Fuel fuel)

@@ -14,7 +14,7 @@ public class GetVehicleByIdQueryHandlerTests
     [Fact]
     public async Task Handle_ExistingId_ReturnsVehicleDto()
     {
-        var vehicle = new Vehicle("Alfa Romeo", "Giulia", "Ale");
+        var vehicle = new Vehicle("Alfa Romeo", "Giulia", "Ale", null, null);
         _repository.GetByIdAsync(vehicle.Id).Returns(vehicle);
 
         var result = await CreateHandler().Handle(new GetVehicleByIdQuery(vehicle.Id), default);
@@ -24,6 +24,20 @@ public class GetVehicleByIdQueryHandlerTests
         Assert.Equal("Alfa Romeo", result.Brand);
         Assert.Equal("Giulia", result.Model);
         Assert.Equal("Ale", result.Owner);
+        Assert.Null(result.Nickname);
+        Assert.Null(result.LicencesPlate);
+    }
+
+    [Fact]
+    public async Task Handle_ExistingId_MapsNicknameAndPlate()
+    {
+        var vehicle = new Vehicle("Alfa Romeo", "Giulia", "Ale", "Rosso", "AB123CD");
+        _repository.GetByIdAsync(vehicle.Id).Returns(vehicle);
+
+        var result = await CreateHandler().Handle(new GetVehicleByIdQuery(vehicle.Id), default);
+
+        Assert.Equal("Rosso", result!.Nickname);
+        Assert.Equal("AB123CD", result.LicencesPlate);
     }
 
     [Fact]
@@ -39,7 +53,7 @@ public class GetVehicleByIdQueryHandlerTests
     [Fact]
     public async Task Handle_VehicleWithFuels_MapsFuelsToDto()
     {
-        var vehicle = new Vehicle("Alfa Romeo", "Giulia", "Ale");
+        var vehicle = new Vehicle("Alfa Romeo", "Giulia", "Ale", null, null);
         vehicle.AddFuel(new Fuel("Diesel"));
         vehicle.AddFuel(new Fuel("Petrol"));
         _repository.GetByIdAsync(vehicle.Id).Returns(vehicle);

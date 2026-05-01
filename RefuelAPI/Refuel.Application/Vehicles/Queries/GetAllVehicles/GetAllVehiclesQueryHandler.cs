@@ -23,6 +23,8 @@ public class GetAllVehiclesQueryHandler : IRequestHandler<GetAllVehiclesQuery, I
             v.Brand,
             v.Model,
             v.Owner,
-            v.Fuels.Select(f => new FuelDto(f.Id, f.Name))));
+            v.Fuels.Select(f => new FuelDto(f.Id, f.Name)),
+            v.Nickname,
+            v.LicencesPlate));
     }
 }

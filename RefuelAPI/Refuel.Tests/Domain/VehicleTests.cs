@@ -8,7 +8,7 @@ public class VehicleTests
     [Fact]
     public void Constructor_ValidData_CreatesVehicle()
     {
-        var vehicle = new Vehicle("Alfa Romeo", "Giulia", "Ale");
+        var vehicle = new Vehicle("Alfa Romeo", "Giulia", "Ale", null, null);
 
         Assert.Equal("Alfa Romeo", vehicle.Brand);
         Assert.Equal("Giulia", vehicle.Model);
@@ -17,13 +17,31 @@ public class VehicleTests
         Assert.Empty(vehicle.Fuels);
     }
 
+    [Fact]
+    public void Constructor_WithNicknameAndPlate_SetsOptionalFields()
+    {
+        var vehicle = new Vehicle("Alfa Romeo", "Giulia", "Ale", "Rosso", "AB123CD");
+
+        Assert.Equal("Rosso", vehicle.Nickname);
+        Assert.Equal("AB123CD", vehicle.LicencesPlate);
+    }
+
+    [Fact]
+    public void Constructor_NullOptionalFields_LeavesThemNull()
+    {
+        var vehicle = new Vehicle("Alfa Romeo", "Giulia", "Ale", null, null);
+
+        Assert.Null(vehicle.Nickname);
+        Assert.Null(vehicle.LicencesPlate);
+    }
+
     [Theory]
     [InlineData("")]
     [InlineData("   ")]
     [InlineData(null)]
     public void Constructor_BlankBrand_ThrowsBusinessRuleException(string? brand)
     {
-        Assert.Throws<BusinessRuleException>(() => new Vehicle(brand!, "Giulia", "Ale"));
+        Assert.Throws<BusinessRuleException>(() => new Vehicle(brand!, "Giulia", "Ale", null, null));
     }
 
     [Theory]
@@ -32,7 +50,7 @@ public class VehicleTests
     [InlineData(null)]
     public void Constructor_BlankModel_ThrowsBusinessRuleException(string? model)
     {
-        Assert.Throws<BusinessRuleException>(() => new Vehicle("Alfa Romeo", model!, "Ale"));
+        Assert.Throws<BusinessRuleException>(() => new Vehicle("Alfa Romeo", model!, "Ale", null, null));
     }
 
     [Theory]
@@ -41,13 +59,13 @@ public class VehicleTests
     [InlineData(null)]
     public void Constructor_BlankOwner_ThrowsBusinessRuleException(string? owner)
     {
-        Assert.Throws<BusinessRuleException>(() => new Vehicle("Alfa Romeo", "Giulia", owner!));
+        Assert.Throws<BusinessRuleException>(() => new Vehicle("Alfa Romeo", "Giulia", owner!, null, null));
     }
 
     [Fact]
     public void AddFuel_NewFuel_AddsFuelToCollection()
     {
-        var vehicle = new Vehicle("Alfa Romeo", "Giulia", "Ale");
+        var vehicle = new Vehicle("Alfa Romeo", "Giulia", "Ale", null, null);
         var fuel = new Fuel("Diesel");
 
         vehicle.AddFuel(fuel);
@@ -59,7 +77,7 @@ public class VehicleTests
     [Fact]
     public void AddFuel_DuplicateFuel_DoesNotAddTwice()
     {
-        var vehicle = new Vehicle("Alfa Romeo", "Giulia", "Ale");
+        var vehicle = new Vehicle("Alfa Romeo", "Giulia", "Ale", null, null);
         var fuel = new Fuel("Diesel");
 
         vehicle.AddFuel(fuel);

@@ -6,5 +6,7 @@ public record CreateVehicleRequest(
     [Required] string Brand,
     [Required] string Model,
     [Required] string Owner,
-    IEnumerable<Guid>? FuelIds
+    IEnumerable<Guid>? FuelIds,
+    string? Nickname,
+    string? LicencesPlate
 );

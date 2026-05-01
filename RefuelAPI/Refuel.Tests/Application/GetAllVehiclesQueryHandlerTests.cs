@@ -16,8 +16,8 @@ public class GetAllVehiclesQueryHandlerTests
     {
         var vehicles = new[]
         {
-            new Vehicle("Alfa Romeo", "Giulia", "Ale"),
-            new Vehicle("BMW", "M3", "Bob")
+            new Vehicle("Alfa Romeo", "Giulia", "Ale", null, null),
+            new Vehicle("BMW", "M3", "Bob", null, null)
         };
         _repository.GetAllAsync().Returns(vehicles);
 
@@ -40,7 +40,7 @@ public class GetAllVehiclesQueryHandlerTests
     public async Task Handle_MapsAllFieldsCorrectly()
     {
         var fuel = new Fuel("Diesel");
-        var vehicle = new Vehicle("Alfa Romeo", "Giulia", "Ale");
+        var vehicle = new Vehicle("Alfa Romeo", "Giulia", "Ale", "Rosso", "AB123CD");
         vehicle.AddFuel(fuel);
         _repository.GetAllAsync().Returns([vehicle]);
 
@@ -50,6 +50,8 @@ public class GetAllVehiclesQueryHandlerTests
         Assert.Equal("Alfa Romeo", result.Brand);
         Assert.Equal("Giulia", result.Model);
         Assert.Equal("Ale", result.Owner);
+        Assert.Equal("Rosso", result.Nickname);
+        Assert.Equal("AB123CD", result.LicencesPlate);
         Assert.Single(result.Fuels);
         Assert.Equal(fuel.Name, result.Fuels.First().Name);
     }

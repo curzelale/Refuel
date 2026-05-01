@@ -13,6 +13,8 @@ public class VehicleConfiguration : IEntityTypeConfiguration<Vehicle>
         builder.Property(prop => prop.Brand).IsRequired().HasColumnName("brand");
         builder.Property(prop => prop.Model).IsRequired().HasColumnName("model");
         builder.Property(prop => prop.Owner).IsRequired().HasColumnName("owner");
+        builder.Property(prop => prop.LicencesPlate).HasColumnName("licences_plate");
+        builder.Property(prop => prop.Nickname).HasColumnName("nickname");
 
         builder.HasMany(v => v.Fuels)
             .WithMany()
