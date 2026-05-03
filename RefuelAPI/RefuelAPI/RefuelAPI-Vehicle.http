@@ -9,7 +9,7 @@ Content-Type: application/json
   "Brand": "Alfa Romeo",
   "Model": "Giulia",
   "Owner": "Ale4",
-  "FuelIds": ["3a701524-4f1c-4b7f-b2a7-82bc95b6e381"],
+  "FuelIds": ["be8f3a6e-0bd1-4dab-9bb3-0828ce6c4a7b"],
   "NickName": "Test targa",
   "licencesPlate": "AA 000 BB"
 }
@@ -24,3 +24,12 @@ Accept: application/json
 
 GET {{RefuelAPI_HostAddress}}/api/v1/Vehicles/157ac01f-a604-4549-8972-bb3f6a09fd62
 Accept: application/json
+
+
+
+### Get refuels 
+
+GET {{RefuelAPI_HostAddress}}/api/v1/Vehicles/9877dee6-a583-45d5-bbd5-1653410f633a/refuels
+Accept: application/json
+
+

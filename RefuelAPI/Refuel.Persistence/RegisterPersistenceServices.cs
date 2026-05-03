@@ -19,6 +19,7 @@ public static class RegisterPersistenceServices
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IGasStationRepository, GasStationRepository>();
         services.AddScoped<IVehicleRepository, VehicleRepository>();
+        services.AddScoped<IRefuelRepository, RefuelRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
 
         return services;

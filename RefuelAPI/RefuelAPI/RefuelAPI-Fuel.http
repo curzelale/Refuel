@@ -6,7 +6,7 @@ POST {{RefuelAPI_HostAddress}}/api/v1/Fuels/
 Content-Type: application/json
 
 {
-  "Name": "Cancella"
+  "Name": "Diesel"
 }
 
 ###Update

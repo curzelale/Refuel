@@ -1,0 +1,15 @@
+﻿@RefuelAPI_HostAddress = http://localhost:5094
+
+###Create
+
+POST {{RefuelAPI_HostAddress}}/api/v1/Refuels/
+Content-Type: application/json
+
+{
+  "FuelId": "0881fdec-1d58-4854-902e-bb28c5d928bc",
+  "GasStationId": "d1af5f99-ab5f-4fcf-86a0-e6ad9923c7c5",
+  "VehicleId": "9877dee6-a583-45d5-bbd5-1653410f633a",
+  "Quantity": 32.5,
+  "TotalPrice": 60.23
+  
+}

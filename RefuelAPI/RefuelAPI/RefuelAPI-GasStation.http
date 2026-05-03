@@ -42,7 +42,7 @@ Accept: application/json
 
 ### Add Fuel
 
-PUT {{RefuelAPI_HostAddress}}/api/v1/GasStations/acc888b3-9493-4335-be86-232a39655aa5/fuels/3a701524-4f1c-4b7f-b2a7-82bc95b6e381
+PUT {{RefuelAPI_HostAddress}}/api/v1/GasStations/d1af5f99-ab5f-4fcf-86a0-e6ad9923c7c5/fuels/0881fdec-1d58-4854-902e-bb28c5d928bc
 Content-Type: application/json
 
 ### Get Fuels

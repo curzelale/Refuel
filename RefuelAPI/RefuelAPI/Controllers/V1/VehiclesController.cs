@@ -1,5 +1,6 @@
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
+using Refuel.Application.Refuels.Queries.GetRefuelsByVehicleId;
 using Refuel.Application.Vehicles.Commands.CreateVehicle;
 using Refuel.Application.Vehicles.Queries.GetAllVehicles;
 using Refuel.Application.Vehicles.Queries.GetVehicleById;
@@ -34,6 +35,13 @@ public class VehiclesController : ControllerBase
     {
         var result = await _mediator.Send(new GetVehicleByIdQuery(id), cancellationToken);
         return result is null ? NotFound() : Ok(result);
+    }
+
+    [HttpGet("{vehicleId:guid}/refuels")]
+    public async Task<IActionResult> GetRefuels(Guid vehicleId, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(new GetRefuelsByVehicleIdQuery(vehicleId), cancellationToken);
+        return Ok(result);
     }
 
     [HttpPost]
