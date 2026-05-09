@@ -1,0 +1,59 @@
+@RefuelAPI_HostAddress = http://localhost:5094
+
+### Register
+
+POST {{RefuelAPI_HostAddress}}/register
+Content-Type: application/json
+
+{
+  "email": "user@refuel.local",
+  "password": "Password1"
+}
+
+### Login
+
+# @name login
+POST {{RefuelAPI_HostAddress}}/login
+Content-Type: application/json
+
+{
+  "email": "user@refuel.local",
+  "password": "Password1"
+}
+
+### Login (admin)
+
+# @name loginAdmin
+POST {{RefuelAPI_HostAddress}}/login
+Content-Type: application/json
+
+{
+  "email": "admin@refuel.local",
+  "password": "Admin123!"
+}
+
+### Refresh token
+
+POST {{RefuelAPI_HostAddress}}/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{login.response.body.refreshToken}}"
+}
+
+### Get current user info
+
+GET {{RefuelAPI_HostAddress}}/manage/info
+Authorization: Bearer {{login.response.body.accessToken}}
+
+### Update current user info
+
+POST {{RefuelAPI_HostAddress}}/manage/info
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+
+{
+  "newEmail": "user@refuel.local",
+  "newPassword": "Password1",
+  "oldPassword": "Password1"
+}

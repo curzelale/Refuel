@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Refuel.Application.Fuels.Commands.CreateFuel;
 using Refuel.Application.Fuels.Commands.DeleteFuel;
 using Refuel.Application.Fuels.Commands.UpdateFuel;
-using Refuel.Application.Fuels.Dtos;
 using Refuel.Application.Fuels.Queries.GetAllFuels;
 using Refuel.Application.Fuels.Queries.GetFuelById;
+using RefuelAPI.Authorization;
 using RefuelAPI.Controllers.V1.Requests;
 
 namespace RefuelAPI.Controllers.V1;
@@ -14,6 +14,7 @@ namespace RefuelAPI.Controllers.V1;
 
 [ApiController]
 [Route("api/v1/{controller}")]
+[BearerAuthorize]
 public class FuelsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -38,6 +39,7 @@ public class FuelsController : ControllerBase
     }
 
     [HttpPost]
+    [BearerAuthorize(Roles.Admin)]
     public async Task<IActionResult> Create([FromBody] CreateFuelRequest request, CancellationToken cancellationToken)
     {
         var command = new CreateFuelCommand(request.Name);
@@ -46,6 +48,7 @@ public class FuelsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [BearerAuthorize(Roles.Admin)]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateFuelRequest request,
         CancellationToken cancellationToken)
     {
@@ -55,6 +58,7 @@ public class FuelsController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [BearerAuthorize(Roles.Admin)]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
         await _mediator.Send(new DeleteFuelCommand(id), cancellationToken);

@@ -3,14 +3,17 @@ using Microsoft.AspNetCore.Mvc;
 using Refuel.Application.Refuels.Commands.CreateRefuel;
 using Refuel.Application.Refuels.Queries.GetAllRefuels;
 using Refuel.Application.Refuels.Queries.GetRefuelById;
+using RefuelAPI.Authorization;
 using RefuelAPI.Controllers.V1.Requests;
 
 namespace RefuelAPI.Controllers.V1;
 
 //TODO: Alla creazione di un nuovo record controllare che i km non vandano indietro
+//TODO: Migliorare la gestione dei codici http di risposta in caso di incompatibilità
 
 [ApiController]
 [Route("api/v1/{controller}")]
+[BearerAuthorize]
 public class RefuelsController : ControllerBase
 {
     private readonly IMediator _mediator;

@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Refuel.Domain.Entities;
+using Refuel.Persistence.Identity;
 
 namespace Refuel.Persistence;
 
-public class RefuelDbContext : DbContext
+public class RefuelDbContext : IdentityDbContext<ApplicationUser>
 {
     public RefuelDbContext(DbContextOptions<RefuelDbContext> options) : base(options)
     {

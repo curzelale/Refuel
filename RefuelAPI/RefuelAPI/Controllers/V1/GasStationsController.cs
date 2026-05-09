@@ -1,15 +1,14 @@
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
-using Refuel.Application.Fuels.Dtos;
 using Refuel.Application.GasStations.Commands.AddFuelToGasStation;
 using Refuel.Application.GasStations.Commands.CreateGasStation;
 using Refuel.Application.GasStations.Commands.DeleteGasStation;
 using Refuel.Application.GasStations.Commands.RemoveFuelFromGasStation;
 using Refuel.Application.GasStations.Commands.UpdateGasStation;
-using Refuel.Application.GasStations.Dtos;
 using Refuel.Application.GasStations.Queries.GetAllGasStations;
 using Refuel.Application.GasStations.Queries.GetFuelsForGasStation;
 using Refuel.Application.GasStations.Queries.GetGasStationById;
+using RefuelAPI.Authorization;
 using RefuelAPI.Controllers.V1.Requests;
 
 namespace RefuelAPI.Controllers.V1;
@@ -19,6 +18,7 @@ namespace RefuelAPI.Controllers.V1;
 
 [ApiController]
 [Route("api/v1/{controller}")]
+[BearerAuthorize]
 public class GasStationsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -43,6 +43,7 @@ public class GasStationsController : ControllerBase
     }
 
     [HttpPost]
+    [BearerAuthorize(Roles.Admin)]
     public async Task<IActionResult> Create([FromBody] CreateGasStationRequest request,
         CancellationToken cancellationToken)
     {
@@ -52,6 +53,7 @@ public class GasStationsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [BearerAuthorize(Roles.Admin)]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateGasStationRequest request,
         CancellationToken cancellationToken)
     {
@@ -62,6 +64,7 @@ public class GasStationsController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [BearerAuthorize(Roles.Admin)]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
         await _mediator.Send(new DeleteGasStationCommand(id), cancellationToken);
@@ -76,6 +79,7 @@ public class GasStationsController : ControllerBase
     }
 
     [HttpPut("{id:guid}/fuels/{fuelId:guid}")]
+    [BearerAuthorize(Roles.Admin)]
     public async Task<IActionResult> AddFuel(Guid id, Guid fuelId, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new AddFuelToGasStationCommand(id, fuelId), cancellationToken);
@@ -83,6 +87,7 @@ public class GasStationsController : ControllerBase
     }
 
     [HttpDelete("{id:guid}/fuels/{fuelId:guid}")]
+    [BearerAuthorize(Roles.Admin)]
     public async Task<IActionResult> RemoveFuel(Guid id, Guid fuelId, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new RemoveFuelFromGasStationCommand(id, fuelId), cancellationToken);

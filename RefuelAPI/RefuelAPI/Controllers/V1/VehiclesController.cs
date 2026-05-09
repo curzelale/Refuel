@@ -4,6 +4,7 @@ using Refuel.Application.Refuels.Queries.GetRefuelsByVehicleId;
 using Refuel.Application.Vehicles.Commands.CreateVehicle;
 using Refuel.Application.Vehicles.Queries.GetAllVehicles;
 using Refuel.Application.Vehicles.Queries.GetVehicleById;
+using RefuelAPI.Authorization;
 using RefuelAPI.Controllers.V1.Requests;
 
 namespace RefuelAPI.Controllers.V1;
@@ -13,6 +14,7 @@ namespace RefuelAPI.Controllers.V1;
 //TODO: Non permettere la creazione di veicoli con la stessa targa
 [ApiController]
 [Route("api/v1/{controller}")]
+[BearerAuthorize]
 public class VehiclesController : ControllerBase
 {
     private readonly IMediator _mediator;
