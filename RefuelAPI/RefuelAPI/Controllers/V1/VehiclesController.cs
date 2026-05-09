@@ -12,8 +12,11 @@ namespace RefuelAPI.Controllers.V1;
 //TODO: Aggiungere endpoint di modifica veicolo
 //TODO: Aggiungere endpoint per la cancellazione di un veicolo controllando che non sia associato ad altro
 //TODO: Non permettere la creazione di veicoli con la stessa targa
+/// <summary>
+/// Manage your vehicles. Each vehicle has a brand, model, license plate, nickname, and supported fuel types.
+/// </summary>
 [ApiController]
-[Route("api/v1/{controller}")]
+[Route("api/v1/[controller]")]
 [BearerAuthorize]
 public class VehiclesController : ControllerBase
 {

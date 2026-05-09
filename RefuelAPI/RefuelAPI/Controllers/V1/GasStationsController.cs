@@ -16,8 +16,12 @@ namespace RefuelAPI.Controllers.V1;
 //TODO: Se l'indirizzo non viene compilato fare il geocoding in automatico
 //TODO: Bloccare la cancellazione se ci sono rifornimenti collegati
 
+/// <summary>
+/// Manage gas stations and the fuel types they offer. Admins can create, update, and delete stations
+/// and associate them with specific fuels.
+/// </summary>
 [ApiController]
-[Route("api/v1/{controller}")]
+[Route("api/v1/[controller]")]
 [BearerAuthorize]
 public class GasStationsController : ControllerBase
 {

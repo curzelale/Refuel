@@ -11,8 +11,12 @@ namespace RefuelAPI.Controllers.V1;
 //TODO: Alla creazione di un nuovo record controllare che i km non vandano indietro
 //TODO: Migliorare la gestione dei codici http di risposta in caso di incompatibilità
 
+/// <summary>
+/// Record and retrieve refueling sessions. Each entry tracks the vehicle, gas station, fuel type,
+/// quantity, price per liter, total cost, odometer reading, and optional notes.
+/// </summary>
 [ApiController]
-[Route("api/v1/{controller}")]
+[Route("api/v1/[controller]")]
 [BearerAuthorize]
 public class RefuelsController : ControllerBase
 {

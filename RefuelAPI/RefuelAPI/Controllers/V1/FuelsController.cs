@@ -12,8 +12,12 @@ namespace RefuelAPI.Controllers.V1;
 
 //TODO: Bloccare la cancellazione se è collegato a qualcosa
 
+/// <summary>
+/// Manage fuel types available in the system (e.g. gasoline, diesel, LPG).
+/// Creation, update, and deletion are restricted to admins.
+/// </summary>
 [ApiController]
-[Route("api/v1/{controller}")]
+[Route("api/v1/[controller]")]
 [BearerAuthorize]
 public class FuelsController : ControllerBase
 {

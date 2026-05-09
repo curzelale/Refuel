@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.OpenApi;
 using Refuel.Application;
 using Refuel.Persistence;
 using Refuel.Persistence.Identity;
 using RefuelAPI.Middleware;
-using RefuelAPI.OpenApi;
 using RefuelAPI.Services;
 using Scalar.AspNetCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,31 +26,51 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
 
 builder.Services.AddHostedService<AdminSeederService>();
 
-builder.Services.AddOpenApi(options =>
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
 {
-    options.AddDocumentTransformer((document, context, cancellationToken) =>
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
-        document.Info.Description = "**Refuel API** allows you to easily manage car refueling. " +
-            "Track fuel stops for your vehicles, record costs and quantities, and monitor consumption and fuel prices over time.";
-        return Task.CompletedTask;
+        Title = "Refuel API",
+        Version = "v1",
+        Description = "**Refuel API** allows you to easily manage car refueling. " +
+                      "Track fuel stops for your vehicles, record costs and quantities, and monitor consumption and fuel prices over time."
     });
-    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+
+    options.AddSecurityDefinition("BearerAuth", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        In = ParameterLocation.Header,
+        Description = "Enter the bearer access token obtained from POST /login"
+    });
+
+    options.AddSecurityRequirement(doc => new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecuritySchemeReference("BearerAuth", doc, null),
+            new List<string>()
+        }
+    });
+
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename), true);
 });
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger(opt => opt.RouteTemplate = "openapi/{documentName}.json");
     app.MapScalarApiReference("/docs", options =>
     {
         options.WithTitle("Refuel API")
-        .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient)
-        .AddPreferredSecuritySchemes("BearerAuth")
-        .AddHttpAuthentication("BearerAuth", auth =>
-        {
-            auth.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
-        });
+            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient)
+            .AddPreferredSecuritySchemes("BearerAuth")
+            .AddHttpAuthentication("BearerAuth", auth =>
+            {
+                auth.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+            });
     });
 }
 
