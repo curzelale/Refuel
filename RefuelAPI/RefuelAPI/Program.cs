@@ -40,7 +40,14 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapIdentityApi<ApplicationUser>();
+var allowRegistration = app.Configuration.GetValue<bool>("AllowRegistration");
+app.MapIdentityApi<ApplicationUser>()
+   .AddEndpointFilter(async (context, next) =>
+   {
+       if (!allowRegistration && context.HttpContext.Request.Path.StartsWithSegments("/register"))
+           return Results.Problem("Registration is disabled.", statusCode: StatusCodes.Status403Forbidden);
+       return await next(context);
+   });
 app.MapControllers();
 
 app.Run();

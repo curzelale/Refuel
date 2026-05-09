@@ -6,7 +6,7 @@ POST {{RefuelAPI_HostAddress}}/register
 Content-Type: application/json
 
 {
-  "email": "user@refuel.local",
+  "email": "user@refuel.local2",
   "password": "Password1"
 }
 
