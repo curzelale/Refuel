@@ -5,6 +5,7 @@ using Refuel.Persistence.Identity;
 using RefuelAPI.Middleware;
 using RefuelAPI.OpenApi;
 using RefuelAPI.Services;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,12 @@ builder.Services.AddHostedService<AdminSeederService>();
 
 builder.Services.AddOpenApi(options =>
 {
+    options.AddDocumentTransformer((document, context, cancellationToken) =>
+    {
+        document.Info.Description = "**Refuel API** allows you to easily manage car refueling. " +
+            "Track fuel stops for your vehicles, record costs and quantities, and monitor consumption and fuel prices over time.";
+        return Task.CompletedTask;
+    });
     options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
 });
 
@@ -34,6 +41,16 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference("/docs", options =>
+    {
+        options.WithTitle("Refuel API")
+        .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient)
+        .AddPreferredSecuritySchemes("BearerAuth")
+        .AddHttpAuthentication("BearerAuth", auth =>
+        {
+            auth.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+        });
+    });
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
