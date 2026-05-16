@@ -1,0 +1,81 @@
+.sidenav-container {
+  height: 100vh;
+}
+
+.sidenav {
+  width: 250px;
+}
+
+.sidenav .mat-toolbar {
+  background: inherit;
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.content {
+  padding: 16px;
+  height: calc(100vh - 64px); // Adjust for top toolbar
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+// Adjust content height for mobile (toolbar + bottom nav)
+@media (max-width: 599.98px) {
+  .content {
+    height: calc(100vh - 56px - 64px); // 56px for top toolbar, 64px for bottom nav
+    padding-bottom: 80px; // extra space so content isn't hidden behind bottom nav
+  }
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background-color: var(--mat-sys-surface);
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 10;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+
+  // Fix #10: bottom-nav button layout handled via global styles in styles.scss
+  // to avoid deprecated ::ng-deep
+  a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    flex: 1;
+    color: var(--mat-sys-on-surface-variant);
+    text-decoration: none;
+    font-size: 12px;
+    gap: 2px;
+
+    &.active {
+      color: var(--mat-sys-primary);
+    }
+
+    mat-icon {
+      font-size: 22px;
+      width: 22px;
+      height: 22px;
+    }
+
+    span {
+      font-size: 11px;
+      line-height: 1;
+    }
+  }
+}

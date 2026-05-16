@@ -1,0 +1,164 @@
+<div class="page-container">
+  <!-- Add Vehicle Form -->
+  <mat-card class="form-card">
+    <mat-card-header>
+      <div class="card-header-icon">
+        <mat-icon>directions_car</mat-icon>
+      </div>
+      <div class="card-header-text">
+        <mat-card-title>Aggiungi Nuovo Veicolo</mat-card-title>
+        <mat-card-subtitle>Registra un'auto per tracciare i rifornimenti</mat-card-subtitle>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="vehicleForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Marca</mat-label>
+            <input matInput formControlName="brand" placeholder="es. Alfa Romeo">
+            <mat-icon matSuffix>garage</mat-icon>
+            @if (vehicleForm.get('brand')?.hasError('required')) {
+              <mat-error>La marca è obbligatoria</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Modello</mat-label>
+            <input matInput formControlName="model" placeholder="es. Giulia">
+            @if (vehicleForm.get('model')?.hasError('required')) {
+              <mat-error>Il modello è obbligatorio</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Nickname (Opzionale)</mat-label>
+            <input matInput formControlName="nickname" placeholder="es. La mia auto">
+            <mat-icon matSuffix>star_outline</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Targa (Opzionale)</mat-label>
+            <input matInput formControlName="licencesPlate" placeholder="es. AB123CD">
+            <mat-icon matSuffix>pin</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Proprietario (Opzionale)</mat-label>
+          <input matInput formControlName="owner" placeholder="Nome del proprietario">
+          <mat-icon matSuffix>person_outline</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Tipi di Carburante (Opzionale)</mat-label>
+          <mat-select formControlName="fuelIds" multiple>
+            @for (fuel of fuels(); track fuel.id) {
+              <mat-option [value]="fuel.id">{{ fuel.name }}</mat-option>
+            }
+          </mat-select>
+          <mat-icon matSuffix>opacity</mat-icon>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" type="submit" class="submit-button"
+          [disabled]="vehicleForm.invalid || isSubmitting()">
+          @if (!isSubmitting()) { <mat-icon>add_circle</mat-icon> }
+          @if (isSubmitting()) { <mat-spinner diameter="20"></mat-spinner> }
+          <span>{{ isSubmitting() ? 'Aggiunta in corso...' : 'Aggiungi Veicolo' }}</span>
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Vehicles List -->
+  <mat-card class="list-card">
+    <mat-card-header>
+      <mat-card-title>Veicoli Registrati</mat-card-title>
+      <mat-card-subtitle>{{ vehicles().length }} veicolo/i registrato/i</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (isLoading()) {
+        <div class="loading-state">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Caricamento veicoli in corso...</p>
+        </div>
+      }
+
+      @if (!isLoading() && vehicles().length === 0) {
+        <div class="empty-state">
+          <mat-icon>directions_car</mat-icon>
+          <p>Nessun veicolo registrato. Aggiungi la tua prima auto qui sopra!</p>
+        </div>
+      }
+
+      @if (!isLoading() && vehicles().length > 0) {
+        <div class="table-responsive">
+          <table mat-table [dataSource]="vehicles()">
+
+            <ng-container matColumnDef="brand">
+              <th mat-header-cell *matHeaderCellDef>Marca</th>
+              <td mat-cell *matCellDef="let v">{{ v.brand }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="model">
+              <th mat-header-cell *matHeaderCellDef>Modello</th>
+              <td mat-cell *matCellDef="let v">{{ v.model }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="nickname">
+              <th mat-header-cell *matHeaderCellDef>Nickname</th>
+              <td mat-cell *matCellDef="let v">
+                @if (v.nickname) {
+                  <span class="nickname-chip">{{ v.nickname }}</span>
+                } @else {
+                  <span class="no-value">—</span>
+                }
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="licencesPlate">
+              <th mat-header-cell *matHeaderCellDef>Targa</th>
+              <td mat-cell *matCellDef="let v">
+                @if (v.licencesPlate) {
+                  <span class="plate-chip">{{ v.licencesPlate }}</span>
+                } @else {
+                  <span class="no-value">—</span>
+                }
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fuels">
+              <th mat-header-cell *matHeaderCellDef>Carburanti</th>
+              <td mat-cell *matCellDef="let v">
+                @if (v.fuels && v.fuels.length > 0) {
+                  <span class="fuel-chips">
+                    @for (f of v.fuels; track f.id) {
+                      <span class="fuel-chip">{{ f.name }}</span>
+                    }
+                  </span>
+                } @else {
+                  <span class="no-value">—</span>
+                }
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let v">
+                <button mat-icon-button color="warn" (click)="deleteVehicle(v.id)" matTooltip="Elimina veicolo">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

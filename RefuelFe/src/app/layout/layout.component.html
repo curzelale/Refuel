@@ -1,0 +1,85 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav fixedInViewport
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'"
+      [opened]="(isHandset$ | async) === false"
+      *ngIf="!(isHandset$ | async)">
+    <mat-toolbar color="primary">
+      <span>Refuel App</span>
+      <span class="spacer"></span>
+      <button mat-icon-button
+              (click)="themeService.toggle()"
+              [matTooltip]="themeService.effectiveTheme() === 'dark' ? 'Passa al tema chiaro' : 'Passa al tema scuro'">
+        <mat-icon>{{ themeService.effectiveTheme() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+    </mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/add-refuel" routerLinkActive="active">
+        <mat-icon matListItemIcon>local_gas_station</mat-icon>
+        <div matListItemTitle>Aggiungi Rifornimento</div>
+      </a>
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <div matListItemTitle>Dashboard</div>
+      </a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/vehicles" routerLinkActive="active">
+        <mat-icon matListItemIcon>directions_car</mat-icon>
+        <div matListItemTitle>Veicoli</div>
+      </a>
+      <a mat-list-item routerLink="/gas-stations" routerLinkActive="active">
+        <mat-icon matListItemIcon>ev_station</mat-icon>
+        <div matListItemTitle>Distributori</div>
+      </a>
+      <a mat-list-item routerLink="/fuels" routerLinkActive="active">
+        <mat-icon matListItemIcon>opacity</mat-icon>
+        <div matListItemTitle>Carburanti</div>
+      </a>
+      <mat-divider></mat-divider>
+      <a mat-list-item (click)="logout()">
+        <mat-icon matListItemIcon>logout</mat-icon>
+        <div matListItemTitle>Esci</div>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar *ngIf="(isHandset$ | async)">
+      <span>Refuel App</span>
+      <span class="spacer"></span>
+      <button mat-icon-button
+              (click)="themeService.toggle()"
+              [matTooltip]="themeService.effectiveTheme() === 'dark' ? 'Passa al tema chiaro' : 'Passa al tema scuro'">
+        <mat-icon>{{ themeService.effectiveTheme() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+      <button mat-icon-button (click)="logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </mat-toolbar>
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<div class="bottom-nav" *ngIf="(isHandset$ | async)">
+  <a mat-button routerLink="/add-refuel" routerLinkActive="active">
+    <mat-icon>local_gas_station</mat-icon>
+    <span>Rifornimento</span>
+  </a>
+  <a mat-button routerLink="/dashboard" routerLinkActive="active">
+    <mat-icon>dashboard</mat-icon>
+    <span>Dashboard</span>
+  </a>
+  <a mat-button routerLink="/vehicles" routerLinkActive="active">
+    <mat-icon>directions_car</mat-icon>
+    <span>Auto</span>
+  </a>
+  <a mat-button routerLink="/gas-stations" routerLinkActive="active">
+    <mat-icon>ev_station</mat-icon>
+    <span>Distributori</span>
+  </a>
+  <a mat-button routerLink="/fuels" routerLinkActive="active">
+    <mat-icon>opacity</mat-icon>
+    <span>Carburanti</span>
+  </a>
+</div>

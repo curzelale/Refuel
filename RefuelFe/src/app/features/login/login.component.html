@@ -1,0 +1,38 @@
+<div class="login-container">
+  <button mat-icon-button class="theme-toggle-btn" (click)="themeService.toggle()"
+          [matTooltip]="themeService.effectiveTheme() === 'dark' ? 'Passa al tema chiaro' : 'Passa al tema scuro'">
+    <mat-icon>{{ themeService.effectiveTheme() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Benvenuto in Refuel</mat-card-title>
+      <mat-card-subtitle>Accedi per continuare</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="admin@refuel.local">
+          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">L'email è obbligatoria</mat-error>
+          <mat-error *ngIf="loginForm.get('email')?.hasError('email')">Inserisci un indirizzo email valido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" placeholder="Password">
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">La password è obbligatoria</mat-error>
+        </mat-form-field>
+
+        <div class="error-message" *ngIf="errorMessage()">
+          {{ errorMessage() }}
+        </div>
+
+        <button mat-flat-button color="primary" type="submit" class="full-width login-button" [disabled]="loginForm.invalid || isLoading()">
+          <span *ngIf="!isLoading()">Accedi</span>
+          <mat-spinner diameter="24" *ngIf="isLoading()"></mat-spinner>
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

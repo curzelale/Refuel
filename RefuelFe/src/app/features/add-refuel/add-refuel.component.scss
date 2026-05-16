@@ -1,0 +1,44 @@
+.add-refuel-container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 24px;
+}
+
+.refuel-card {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+
+  mat-card-header {
+    margin-bottom: 16px;
+  }
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+  
+  .half-width {
+    flex: 1;
+  }
+}
+
+.submit-button {
+  height: 48px;
+  font-size: 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+@media (max-width: 599.98px) {
+  .row {
+    flex-direction: column;
+    gap: 0;
+  }
+}

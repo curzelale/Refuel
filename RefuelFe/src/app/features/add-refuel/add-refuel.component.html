@@ -1,0 +1,84 @@
+<div class="add-refuel-container">
+  <mat-card class="refuel-card">
+    <mat-card-header>
+      <mat-card-title>Registra rifornimento</mat-card-title>
+      <mat-card-subtitle>Registra un nuovo rifornimento</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="refuelForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Seleziona Veicolo</mat-label>
+          <mat-select formControlName="vehicleId">
+            <mat-option *ngFor="let v of vehicles()" [value]="v.id">
+              {{ v.brand }} {{ v.model }} <span *ngIf="v.licencesPlate">({{ v.licencesPlate }})</span>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="refuelForm.get('vehicleId')?.hasError('required')">Il veicolo è obbligatorio</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Seleziona Distributore</mat-label>
+          <mat-select formControlName="gasStationId">
+            <mat-option *ngFor="let station of gasStations()" [value]="station.id">
+              {{ station.name }} - {{ station.address }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="refuelForm.get('gasStationId')?.hasError('required')">Il distributore è
+            obbligatorio</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Seleziona Tipo di Carburante</mat-label>
+          <mat-select formControlName="fuelId">
+            <mat-option *ngFor="let fuel of fuels()" [value]="fuel.id">
+              {{ fuel.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="refuelForm.get('fuelId')?.hasError('required')">Il tipo di carburante è
+            obbligatorio</mat-error>
+        </mat-form-field>
+
+        <div class="row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Quantità (Litri)</mat-label>
+            <input matInput type="number" formControlName="quantity" step="0.1">
+            <mat-error *ngIf="refuelForm.get('quantity')?.hasError('required')">Obbligatorio</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Prezzo Totale</mat-label>
+            <input matInput type="number" formControlName="totalPrice" step="0.01">
+            <mat-error *ngIf="refuelForm.get('totalPrice')?.hasError('required')">Obbligatorio</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Data</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="refuelForm.get('date')?.hasError('required')">Obbligatorio</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Contachilometri (Km)</mat-label>
+            <input matInput type="number" formControlName="odometerKm">
+            <mat-error *ngIf="refuelForm.get('odometerKm')?.hasError('required')">Obbligatorio</mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Note (Opzionale)</mat-label>
+          <textarea matInput formControlName="note" rows="2"></textarea>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" type="submit" class="full-width submit-button"
+          [disabled]="refuelForm.invalid || isLoading()">
+          {{ isLoading() ? 'Salvataggio...' : 'Salva Rifornimento' }}
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

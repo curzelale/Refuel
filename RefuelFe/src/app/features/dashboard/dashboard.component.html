@@ -1,0 +1,75 @@
+<div class="dashboard-container">
+  <div class="header-section">
+    <h2>Dashboard</h2>
+    <mat-form-field appearance="outline" class="vehicle-selector">
+      <mat-label>Seleziona Veicolo</mat-label>
+      <mat-select [formControl]="vehicleControl">
+        <mat-option *ngFor="let v of vehicles()" [value]="v.id">
+          {{ v.brand }} {{ v.model }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="stats-grid">
+    <mat-card class="stat-card">
+      <mat-card-subtitle>Spesa Totale</mat-card-subtitle>
+      <mat-card-title>{{ totalSpent() | currency:'EUR':'symbol':'1.2-2' }}</mat-card-title>
+    </mat-card>
+    <mat-card class="stat-card">
+      <mat-card-subtitle>Carburante Totale (Litri)</mat-card-subtitle>
+      <mat-card-title>{{ totalLiters() | number:'1.1-2' }} L</mat-card-title>
+    </mat-card>
+    <mat-card class="stat-card">
+      <mat-card-subtitle>Rifornimenti Effettuati</mat-card-subtitle>
+      <mat-card-title>{{ refuels().length }}</mat-card-title>
+    </mat-card>
+  </div>
+
+  <mat-card class="table-card">
+    <mat-card-header>
+      <mat-card-title>Rifornimenti Recenti</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="table-responsive">
+        <table mat-table [dataSource]="refuels()">
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef> Data </th>
+            <td mat-cell *matCellDef="let element"> {{ element.date | date:'shortDate' }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="station">
+            <th mat-header-cell *matHeaderCellDef> Distributore </th>
+            <td mat-cell *matCellDef="let element"> {{ element.gasStation?.name || 'Sconosciuto' }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="fuel">
+            <th mat-header-cell *matHeaderCellDef> Carburante </th>
+            <td mat-cell *matCellDef="let element"> {{ element.fuel?.name || 'Sconosciuto' }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef> Quantità </th>
+            <td mat-cell *matCellDef="let element"> {{ element.quantity | number:'1.1-2' }} L </td>
+          </ng-container>
+
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef> Prezzo Totale </th>
+            <td mat-cell *matCellDef="let element"> {{ element.totalPrice | currency:'EUR':'symbol':'1.2-2' }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="odometer">
+            <th mat-header-cell *matHeaderCellDef> Contachilometri </th>
+            <td mat-cell *matCellDef="let element"> {{ element.odometerKm }} km </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <div *ngIf="refuels().length === 0" class="no-data">
+          Nessun rifornimento trovato per questo veicolo.
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
