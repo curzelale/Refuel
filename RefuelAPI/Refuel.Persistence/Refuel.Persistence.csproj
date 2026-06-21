@@ -9,16 +9,13 @@
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.7" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.7" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
       <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.7" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Refuel.Domain\Refuel.Domain.csproj" />
       <ProjectReference Include="..\Refuel.Application\Refuel.Application.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Migrations\" />
     </ItemGroup>
 
 </Project>

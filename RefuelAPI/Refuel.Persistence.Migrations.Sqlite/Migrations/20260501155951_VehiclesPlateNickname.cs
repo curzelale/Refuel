@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Refuel.Persistence.Migrations
+namespace Refuel.Persistence.Migrations.Sqlite
 {
     /// <inheritdoc />
     public partial class VehiclesPlateNickname : Migration

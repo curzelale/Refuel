@@ -24,6 +24,8 @@
     <ItemGroup>
       <ProjectReference Include="..\Refuel.Persistence\Refuel.Persistence.csproj" />
       <ProjectReference Include="..\Refuel.Application\Refuel.Application.csproj" />
+      <ProjectReference Include="..\Refuel.Persistence.Migrations.Sqlite\Refuel.Persistence.Migrations.Sqlite.csproj" />
+      <ProjectReference Include="..\Refuel.Persistence.Migrations.Postgres\Refuel.Persistence.Migrations.Postgres.csproj" />
     </ItemGroup>
 
 </Project>

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Refuel.Persistence.Migrations
+namespace Refuel.Persistence.Migrations.Sqlite
 {
     /// <inheritdoc />
     public partial class Initial : Migration

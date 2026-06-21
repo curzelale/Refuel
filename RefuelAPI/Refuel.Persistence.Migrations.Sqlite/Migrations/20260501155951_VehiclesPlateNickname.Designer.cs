@@ -8,7 +8,7 @@ using Refuel.Persistence;
 
 #nullable disable
 
-namespace Refuel.Persistence.Migrations
+namespace Refuel.Persistence.Migrations.Sqlite
 {
     [DbContext(typeof(RefuelDbContext))]
     [Migration("20260501155951_VehiclesPlateNickname")]
