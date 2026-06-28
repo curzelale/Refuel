@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { AppConfigService } from './app-config.service';
 import { FuelDto, CreateFuelRequest } from '../models/models';
 
 @Injectable({
@@ -9,7 +9,8 @@ import { FuelDto, CreateFuelRequest } from '../models/models';
 })
 export class FuelService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/api/v1/Fuels`;
+  private config = inject(AppConfigService);
+  private get apiUrl() { return `${this.config.apiUrl}/api/v1/Fuels`; }
 
   getFuels(): Observable<FuelDto[]> {
     return this.http.get<FuelDto[]>(this.apiUrl);

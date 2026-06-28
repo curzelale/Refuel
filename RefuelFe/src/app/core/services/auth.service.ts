@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { AppConfigService } from './app-config.service';
 import { LoginRequest, AccessTokenResponse, RefreshRequest } from '../models/models';
 import { Router } from '@angular/router';
 
@@ -11,20 +11,22 @@ import { Router } from '@angular/router';
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
+  private config = inject(AppConfigService);
+  private get baseUrl() { return this.config.apiUrl; }
 
   private readonly TOKEN_KEY = 'access_token';
   private readonly REFRESH_TOKEN_KEY = 'refresh_token';
   private readonly TOKEN_EXPIRY_KEY = 'token_expiry';
 
   login(request: LoginRequest): Observable<AccessTokenResponse> {
-    return this.http.post<AccessTokenResponse>(`${environment.apiUrl}/login`, request).pipe(
+    return this.http.post<AccessTokenResponse>(`${this.baseUrl}/login`, request).pipe(
       tap(response => this.setTokens(response))
     );
   }
 
   refreshToken(): Observable<AccessTokenResponse> {
     const request: RefreshRequest = { refreshToken: this.getRefreshToken() || '' };
-    return this.http.post<AccessTokenResponse>(`${environment.apiUrl}/refresh`, request).pipe(
+    return this.http.post<AccessTokenResponse>(`${this.baseUrl}/refresh`, request).pipe(
       tap(response => this.setTokens(response))
     );
   }
