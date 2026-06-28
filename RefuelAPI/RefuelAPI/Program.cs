@@ -60,20 +60,18 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+
+app.UseSwagger(opt => opt.RouteTemplate = "openapi/{documentName}.json");
+app.MapScalarApiReference("/docs", options =>
 {
-    app.UseSwagger(opt => opt.RouteTemplate = "openapi/{documentName}.json");
-    app.MapScalarApiReference("/docs", options =>
-    {
-        options.WithTitle("Refuel API")
-            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient)
-            .AddPreferredSecuritySchemes("BearerAuth")
-            .AddHttpAuthentication("BearerAuth", auth =>
-            {
-                auth.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
-            });
-    });
-}
+    options.WithTitle("Refuel API")
+        .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient)
+        .AddPreferredSecuritySchemes("BearerAuth")
+        .AddHttpAuthentication("BearerAuth", auth =>
+        {
+            auth.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+        });
+});
 
 app.UseCors(p => 
     p.SetIsOriginAllowed(_ => true)
